@@ -1,0 +1,251 @@
+:root {
+  --bg-dark: #383838;
+  --bg-light: #F6F6F6;
+  --button-gray: #868686;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-dark);
+  font-family: Pretendard, sans-serif;
+}
+
+/* Header (공통) */
+.page-title {
+  color: black;
+  font-size: 36px;
+  padding: 20px 40px;
+  background: var(--bg-light);
+  margin: 0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Content Area */
+.page-container {
+  padding: 20px 40px;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.search-bar input {
+  width: 400px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.search-bar button {
+  padding: 12px 16px;
+  background: var(--button-gray);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Lecture Card */
+.lecture-card {
+  background: var(--bg-light);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.lecture-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.lecture-info {
+  margin-top: 6px;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+.lecture-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  color: #666;
+}
+
+.card-icons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  gap: 8px;
+}
+
+.icon-btn {
+  padding: 8px 12px;
+  background: var(--button-gray);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+/* LecturePage Layout */
+.lecture-layout {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+}
+
+/* 좌측 필터 바 */
+.filter-bar {
+  width: 250px;
+  background: #F6F6F6;
+  padding: 20px;
+  border-radius: 10px;
+  height: fit-content;
+}
+
+.filter-bar h3 {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* 우측 강의 목록 */
+.lecture-content {
+  flex: 1;
+}
+
+.search-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+/* 전체 레이아웃 */
+.lecture-wrapper {
+  padding: 20px 40px;
+}
+
+/* 🔥 필터 박스 + 검색창을 감싸는 줄 */
+.filter-search-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+  margin-bottom: 25px;
+}
+
+/* 필터 박스 크기 재조정 (검색창과 겹치지 않도록) */
+.filter-box {
+  background: var(--bg-light);
+  padding: 6px 12px;
+  border-radius: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: fit-content;
+  justify-content: center;
+}
+
+/* 검색창 영역 */
+.search-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 한 줄 필터 */
+.filter-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  flex-wrap: wrap;
+  line-height: 1;
+}
+
+.filter-title {
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0;
+}
+
+/* 정렬 셀렉트 */
+.sort-select {
+  padding: 2px 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 11px;
+  height: 24px;
+}
+
+.filter-box label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  margin: 0;
+  white-space: nowrap;
+  padding: 0;
+  line-height: 1;
+}
+
+.filter-box label input {
+  cursor: pointer;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+}
+
+/* Tab Menu */
+.tab-menu {
+  display: flex;
+  gap: 40px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  position: relative;
+  bottom: -1px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 400;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -21px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #000;
+}
+
+.tab-btn.active::after {
+  background-color: #000;
+}
