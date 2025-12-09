@@ -4,11 +4,16 @@
   --button-gray: #868686;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   padding: 0;
   background: var(--bg-dark);
   font-family: Pretendard, sans-serif;
+  scrollbar-gutter: stable;
 }
 
 /* Header (공통) */
@@ -35,22 +40,29 @@ body {
   align-items: center;
   gap: 10px;
   margin-bottom: 0;
+  height: 52px;
 }
 
 .search-bar input {
   width: 400px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 14px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .search-bar button {
-  padding: 12px 16px;
+  padding: 0;
   background: var(--button-gray);
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  height: 100%;
+  width: 52px;
+  box-sizing: border-box;
 }
 
 /* Lecture Card */
@@ -130,7 +142,7 @@ body {
 
 /* 전체 레이아웃 */
 .lecture-wrapper {
-  padding: 20px 40px;
+  padding: 30px 300px;
 }
 
 /* 🔥 필터 박스 + 검색창을 감싸는 줄 */
@@ -146,13 +158,16 @@ body {
 /* 필터 박스 크기 재조정 (검색창과 겹치지 않도록) */
 .filter-box {
   background: var(--bg-light);
-  padding: 6px 12px;
+  padding: 6px 30px;
   border-radius: 12px;
-  flex: 1;
+  flex: 0 1 55%;
+  max-width: 760px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   height: fit-content;
+  align-items: center;
+  text-align: center;
   justify-content: center;
 }
 
@@ -161,7 +176,8 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  flex-shrink: 0;
+  flex: 1;
+  height: 52px;
 }
 
 /* 한 줄 필터 */
@@ -172,6 +188,7 @@ body {
   width: 100%;
   flex-wrap: wrap;
   line-height: 1;
+  /* justify-content: center; */
 }
 
 .filter-title {
@@ -248,4 +265,48 @@ body {
 
 .tab-btn.active::after {
   background-color: #000;
+}
+
+/* Recommend Page Grid Layout */
+.recommend-wrapper {
+  padding: 30px 300px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.recommend-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recommend-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recommend-card {
+  background: var(--bg-light);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.recommend-card h2 {
+  font-size: 20px;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.recommend-card h3 {
+  font-size: 14px;
+  margin: 12px 0 6px 0;
+  font-weight: 600;
+}
+
+.recommend-card p {
+  font-size: 13px;
+  margin: 8px 0;
+  color: #333;
 }
