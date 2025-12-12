@@ -144,9 +144,9 @@ export default function LecturePage() {
     const noteB = normalize(val(b, ["비고", " 비고"]));
 
     switch (sortOption) {
-      case "경쟁률 높은순":
-        return ratioB - ratioA;
       case "경쟁률 낮은순":
+        return ratioB - ratioA;
+      case "경쟁률 높은순":
         return ratioA - ratioB;
       case "담은인원 많은 순":
         return enrolledB - enrolledA;
@@ -167,6 +167,7 @@ export default function LecturePage() {
         {/* 필터 박스 */}
         <div className="filter-box">
           <div className="filter-line">
+            <span className="filter-icon">⚙️</span>
             <span className="filter-title">학년:</span>
             {gradeOptions.map((grade) => (
               <label key={grade}>
@@ -195,8 +196,8 @@ export default function LecturePage() {
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
-                <option value="경쟁률 낮은순">경쟁률 낮은순 ▼</option>
                 <option value="경쟁률 높은순">경쟁률 높은순 ▲</option>
+                <option value="경쟁률 낮은순">경쟁률 낮은순 ▼</option>
                 <option value="담은인원 많은 순">담은인원 많은 순 ▲</option>
                 <option value="담은인원 적은 순">담은인원 적은 순 ▼</option>
             </select>

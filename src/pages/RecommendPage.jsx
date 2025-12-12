@@ -178,7 +178,7 @@ export default function RecommendPage() {
       <div className="recommend-left">
         {/* 인기강의 */}
         <div className="recommend-card">
-          <h2>인기강의</h2>
+          <h2>인기강의 🔍</h2>
           {popularLectures.slice(0, 5).map((lec, idx) => (
             <p key={idx}>
               {getValue(lec, ["과목명", " 과목명"])} ({getValue(lec, ["담당교수", "담당 교수"])})
@@ -188,7 +188,7 @@ export default function RecommendPage() {
 
         {/* 꿀강의 */}
         <div className="recommend-card">
-          <h2>꿀강의</h2>
+          <h2>꿀강의 🔍</h2>
           {easyLectures.slice(0, 5).map((lec, idx) => (
             <p key={idx}>
               {getValue(lec, ["과목명", " 과목명"])} ({getValue(lec, ["담당교수", "담당 교수"])})
@@ -199,7 +199,7 @@ export default function RecommendPage() {
 
         {/* 학년별 추천 교양 */}
         <div className="recommend-card">
-          <h2>학년별 추천 교양</h2>
+          <h2>학년별 추천 교양 🔍</h2>
 
           {[1, 2, 3, 4].map((grade) => (
             <div key={grade}>
@@ -220,7 +220,7 @@ export default function RecommendPage() {
       <div className="recommend-right">
         {/* 강의 추천 */}
         <div className="recommend-card">
-          <h2>강의 추천</h2>
+          <h2>강의 추천 🔍</h2>
 
           <div className="search-bar">
             <input
@@ -248,7 +248,7 @@ export default function RecommendPage() {
 
         {/* 학점조합 */}
         <div className="recommend-card">
-          <h2>학점조합</h2>
+          <h2>학점조합 📊</h2>
 
           <div className="search-bar">
             <input
