@@ -6,7 +6,9 @@ export default function SearchBar({ value, onChange }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <button>🔍</button>
+      <button aria-label="검색">
+        <img src="/icons/search.svg" alt="검색" className="icon-img" />
+      </button>
     </div>
   );
 }

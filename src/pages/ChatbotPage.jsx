@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function ChatbotPage() {
+  const location = useLocation();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState(null);
   const messagesEndRef = useRef(null);
   const isInitialMount = useRef(true);
+  const hasProcessedInitialQuestion = useRef(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -23,6 +26,20 @@ export default function ChatbotPage() {
       scrollToBottom();
     }
   }, [messages]);
+
+  // 초기 질문 자동 전송
+  useEffect(() => {
+    const initialQuestion = location.state?.initialQuestion;
+    if (initialQuestion && !hasProcessedInitialQuestion.current) {
+      hasProcessedInitialQuestion.current = true;
+      setInput(initialQuestion);
+      // 약간의 딜레이 후 자동 전송
+      setTimeout(() => {
+        const submitEvent = { preventDefault: () => {} };
+        handleSendMessage(submitEvent);
+      }, 100);
+    }
+  }, [location.state]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -128,7 +145,7 @@ export default function ChatbotPage() {
             disabled={isLoading || !input.trim()}
             className="chatbot-button"
           >
-            ▶
+            <img src="/icons/send.svg" alt="전송" className="icon-img" />
           </button>
         </form>
       </div>
