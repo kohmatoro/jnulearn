@@ -1,7 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import lectures from "../data/lectures.json";
+import { TimetableContext } from "../context/TimetableContext";
 
 export default function RecommendPage() {
+  const navigate = useNavigate();
+  const { timetables, addTimetable, addCoursesToTimetable } = useContext(TimetableContext);
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [targetCredits, setTargetCredits] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -9,7 +14,10 @@ export default function RecommendPage() {
   const [showTimetableModal, setShowTimetableModal] = useState(false);
   const [selectedComboIndex, setSelectedComboIndex] = useState(null);
   const [selectedLectureTitle, setSelectedLectureTitle] = useState("");
+  const [selectedLectureData, setSelectedLectureData] = useState(null);
   const [modalSource, setModalSource] = useState(""); // 'combo' | 'lecture'
+  const [selectedTimetableId, setSelectedTimetableId] = useState(null);
+  const [selectedCourses, setSelectedCourses] = useState([]);
 
   const getValue = (lec, keys) => {
     for (const key of keys) {
@@ -336,6 +344,8 @@ export default function RecommendPage() {
               style={{ cursor: "pointer" }}
               onClick={() => {
                 setSelectedLectureTitle(getValue(lec, ["과목명", " 과목명"]) || "");
+                setSelectedLectureData(lec);
+                setSelectedCourses([lec]);
                 setModalSource("lecture");
                 setShowTimetableModal(true);
               }}
@@ -353,6 +363,8 @@ export default function RecommendPage() {
               style={{ cursor: "pointer" }}
               onClick={() => {
                 setSelectedLectureTitle(getValue(lec, ["과목명", " 과목명"]) || "");
+                setSelectedLectureData(lec);
+                setSelectedCourses([lec]);
                 setModalSource("lecture");
                 setShowTimetableModal(true);
               }}
@@ -391,6 +403,8 @@ export default function RecommendPage() {
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     setSelectedLectureTitle(getValue(lec, ["과목명", " 과목명"]) || "");
+                    setSelectedLectureData(lec);
+                    setSelectedCourses([lec]);
                     setModalSource("lecture");
                     setShowTimetableModal(true);
                   }}
@@ -439,6 +453,7 @@ export default function RecommendPage() {
                     onClick={() => {
                       setSelectedComboIndex(idx);
                       setSelectedLectureTitle("");
+                      setSelectedCourses(combo);
                       setModalSource("combo");
                       setShowTimetableModal(true);
                     }}
@@ -455,57 +470,86 @@ export default function RecommendPage() {
           ) : (
             <p>원하는 학점을 입력하면 추천 조합을 알려드립니다.</p>
           )}
+        </div>
 
-          {showTimetableModal && (
+        {showTimetableModal && (
+          <div style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}>
             <div style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(0,0,0,0.4)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
+              background: "#fff",
+              borderRadius: 12,
+              padding: 20,
+              width: 420,
+              maxWidth: "90%",
             }}>
-              <div style={{
-                background: "#fff",
-                borderRadius: 12,
-                padding: 20,
-                width: 420,
-                maxWidth: "90%",
-              }}>
-                <h3 style={{ marginTop: 0 }}>시간표에 추가</h3>
-                {modalSource === "combo" ? (
-                  <p style={{ marginTop: 8 }}>선택한 조합: 조합 {selectedComboIndex !== null ? selectedComboIndex + 1 : "-"}</p>
-                ) : (
-                  <p style={{ marginTop: 8 }}>선택한 강의: {selectedLectureTitle || "-"}</p>
-                )}
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
-                  <button 
-                    className="icon-btn" 
-                    style={{ background: "#2c2c2c", color: "white" }}
-                  >
-                    새 시간표 만들기
-                  </button>
-                  <div style={{ background: "#f1f1f1", borderRadius: 8, padding: 8 }}>
-                    <p style={{ margin: 0, fontWeight: 600 }}>시간표 선택</p>
-                    <ul style={{ margin: 0, paddingLeft: 18 }}>
-                      <li>시간표 A</li>
-                      <li>시간표 B</li>
-                      <li>시간표 C</li>
-                    </ul>
-                  </div>
-                  <button 
-                    className="icon-btn" 
-                    style={{ background: "#2c2c2c", color: "white" }}
-                  >
-                    리스트에서 선택한 후 시간표로 이동
-                  </button>
-                  <button className="icon-btn" onClick={() => setShowTimetableModal(false)}>닫기</button>
+              <h3 style={{ marginTop: 0 }}>시간표에 추가</h3>
+              {modalSource === "combo" ? (
+                <p style={{ marginTop: 8 }}>선택한 조합: 조합 {selectedComboIndex !== null ? selectedComboIndex + 1 : "-"}</p>
+              ) : (
+                <p style={{ marginTop: 8 }}>선택한 강의: {selectedLectureTitle || "-"}</p>
+              )}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
+                <button 
+                  className="icon-btn" 
+                  style={{ background: "#2c2c2c", color: "white" }}
+                  onClick={() => {
+                    const newTimetableId = addTimetable("시간표 " + (timetables.length + 1));
+                    addCoursesToTimetable(newTimetableId, selectedCourses);
+                    navigate("/timetable", { state: { timetableId: newTimetableId, courses: selectedCourses } });
+                    setShowTimetableModal(false);
+                  }}
+                >
+                  새 시간표 만들기
+                </button>
+                
+                <div style={{ background: "#f1f1f1", borderRadius: 8, padding: 8 }}>
+                  <p style={{ margin: 0, marginBottom: 8, fontWeight: 600 }}>시간표 선택</p>
+                  {timetables.length > 0 ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {timetables.map(t => (
+                        <label key={t.id} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                          <input 
+                            type="radio" 
+                            name="timetable" 
+                            checked={selectedTimetableId === t.id}
+                            onChange={() => setSelectedTimetableId(t.id)}
+                          />
+                          <span>{t.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ margin: 0, fontSize: "12px", color: "#666" }}>시간표가 없습니다.</p>
+                  )}
                 </div>
+
+                <button 
+                  className="icon-btn" 
+                  style={{ background: "#2c2c2c", color: "white" }}
+                  disabled={!selectedTimetableId}
+                  onClick={() => {
+                    if (selectedTimetableId) {
+                      addCoursesToTimetable(selectedTimetableId, selectedCourses);
+                      navigate("/timetable", { state: { timetableId: selectedTimetableId, courses: selectedCourses } });
+                      setShowTimetableModal(false);
+                    }
+                  }}
+                >
+                  리스트에서 선택한 후 시간표로 이동
+                </button>
+
+                <button className="icon-btn" onClick={() => setShowTimetableModal(false)}>단기</button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { TimetableContext } from "../context/TimetableContext";
 
 export default function LectureCard({
   title,
@@ -15,9 +16,12 @@ export default function LectureCard({
   similarLectures,
 }) {
   const navigate = useNavigate();
+  const { timetables, addTimetable, addCoursesToTimetable } = useContext(TimetableContext);
+  
   const [showTimetableModal, setShowTimetableModal] = useState(false);
   const [showChatbotModal, setShowChatbotModal] = useState(false);
   const [chatbotQuestion, setChatbotQuestion] = useState("");
+  const [selectedTimetableId, setSelectedTimetableId] = useState(null);
 
   const handleChatbotSubmit = () => {
     if (chatbotQuestion.trim()) {
@@ -89,24 +93,60 @@ export default function LectureCard({
               <button 
                 className="icon-btn" 
                 style={{ background: "#2c2c2c", color: "white" }}
+                onClick={() => {
+                  const lectureData = {
+                    "과목명": title,
+                    "담당교수": professor,
+                    "강의실 및 시간": time,
+                  };
+                  const newTimetableId = addTimetable("시간표 " + (timetables.length + 1));
+                  addCoursesToTimetable(newTimetableId, [lectureData]);
+                  navigate("/timetable", { state: { timetableId: newTimetableId, courses: [lectureData] } });
+                  setShowTimetableModal(false);
+                }}
               >
                 새 시간표 만들기
               </button>
               <div style={{ background: "#f1f1f1", borderRadius: 8, padding: 8 }}>
-                <p style={{ margin: 0, fontWeight: 600 }}>시간표 선택</p>
-                <ul style={{ margin: 0, paddingLeft: 18 }}>
-                  <li>시간표 A</li>
-                  <li>시간표 B</li>
-                  <li>시간표 C</li>
-                </ul>
+                <p style={{ margin: 0, marginBottom: 8, fontWeight: 600 }}>시간표 선택</p>
+                {timetables.length > 0 ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    {timetables.map(t => (
+                      <label key={t.id} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                        <input 
+                          type="radio" 
+                          name="timetable" 
+                          checked={selectedTimetableId === t.id}
+                          onChange={() => setSelectedTimetableId(t.id)}
+                        />
+                        <span>{t.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ margin: 0, fontSize: "12px", color: "#666" }}>시간표가 없습니다.</p>
+                )}
               </div>
               <button 
                 className="icon-btn" 
                 style={{ background: "#2c2c2c", color: "white" }}
+                disabled={!selectedTimetableId}
+                onClick={() => {
+                  if (selectedTimetableId) {
+                    const lectureData = {
+                      "과목명": title,
+                      "담당교수": professor,
+                      "강의실 및 시간": time,
+                    };
+                    addCoursesToTimetable(selectedTimetableId, [lectureData]);
+                    navigate("/timetable", { state: { timetableId: selectedTimetableId, courses: [lectureData] } });
+                    setShowTimetableModal(false);
+                  }
+                }}
               >
                 리스트에서 선택한 후 시간표로 이동
               </button>
-              <button className="icon-btn" onClick={() => setShowTimetableModal(false)}>닫기</button>
+              <button className="icon-btn" onClick={() => setShowTimetableModal(false)}>단기</button>
             </div>
           </div>
         </div>

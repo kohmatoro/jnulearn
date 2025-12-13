@@ -621,51 +621,324 @@ body {
   cursor: not-allowed;
 }
 
-.timetable-grid {
-  display: grid;
-  /* 시간축(80px) + 5일(자동) */
-  grid-template-columns: 80px repeat(5, 1fr);
-  /* 헤더(50px) + 10교시(자동) */
-  grid-template-rows: 50px repeat(10, 1fr);
-  
-  background: #fff;
-  border-radius: 12px;
-  min-height: 600px; /* 시간표 높이 확보 */
-  overflow: hidden;
+/* ============ TIMETABLE PAGE ============ */
+.timetable-page {
+  display: flex;
+  gap: 24px;
+  padding: 30px;
+  min-height: 100vh;
+  background: var(--bg-dark);
 }
 
-/* 칸 구분선 및 정렬 */
-.grid-header, .grid-time, .grid-cell {
-  border: 1px solid #eee; /* 얇은 테두리 */
+.timetable-sidebar {
+  width: 280px;
+  background: var(--bg-light);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: fit-content;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.semester-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.timetable-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
-.grid-header, .grid-time {
-  background: var(--bg-light); 
-  font-weight: bold;
-  color: #555;
+.card-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
 }
 
-.grid-cell {
-  cursor: pointer; 
+.settings-btn {
+  padding: 4px 8px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.grid-cell:hover {
+.settings-btn:hover {
+  background: #eee;
+}
+
+.card-content {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.credits-display {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c2c2c;
+}
+
+.card-footer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.timetable-tab {
+  flex: 1;
+  min-width: 60px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timetable-tab.active {
+  background: #2c2c2c;
+  color: white;
+  border-color: #2c2c2c;
+}
+
+.timetable-tab:hover {
   background: #f0f0f0;
 }
 
+.new-timetable-btn {
+  width: 100%;
+  padding: 12px;
+  background: #2c2c2c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.new-timetable-btn:hover {
+  background: #444;
+}
+
+/* 메인 시간표 영역 */
+.timetable-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timetable-header {
+  padding: 20px;
+  background: var(--bg-light);
+  border-radius: 8px;
+}
+
+.timetable-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c2c2c;
+}
+
+.timetable-grid {
+  display: grid;
+  grid-template-columns: 70px repeat(6, 1fr);
+  grid-template-rows: 40px repeat(10, 60px);
+  
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.grid-corner {
+  background: #f8f8f8;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.grid-header {
+  background: #f8f8f8;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.grid-time {
+  background: #f8f8f8;
+  border-right: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.grid-cell {
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  position: relative;
+}
+
+.grid-cell:hover {
+  background: #f9f9f9;
+}
 
 .event-card {
-  margin: 2px;
-  padding: 4px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
   color: #333;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 2px;
+  transition: opacity 0.2s;
+}
+
+.event-card:hover {
+  opacity: 0.8;
+}
+
+.event-name {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.event-place {
+  font-size: 10px;
+  color: #555;
+  margin-top: 2px;
+}
+
+/* 반응형 */
+@media (max-width: 1200px) {
+  .timetable-page {
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .timetable-sidebar {
+    width: 240px;
+  }
+
+  .timetable-grid {
+    grid-template-columns: 60px repeat(6, 1fr);
+    grid-template-rows: 36px repeat(10, 50px);
+  }
+
+  .grid-header, .grid-time {
+    font-size: 12px;
+  }
+
+  .event-card {
+    font-size: 10px;
+    padding: 4px;
+  }
+}
+
+@media (max-width: 992px) {
+  .timetable-page {
+    flex-direction: column;
+  }
+
+  .timetable-sidebar {
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .timetable-grid {
+    grid-template-columns: 50px repeat(6, 1fr);
+    grid-template-rows: 32px repeat(10, 45px);
+  }
+
+  .grid-header, .grid-time {
+    font-size: 11px;
+  }
+
+  .event-card {
+    font-size: 9px;
+    padding: 2px;
+  }
+}
+
+@media (max-width: 768px) {
+  .timetable-page {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .timetable-sidebar {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .timetable-grid {
+    grid-template-columns: 45px repeat(6, 1fr);
+    grid-template-rows: 30px repeat(10, 40px);
+    font-size: 10px;
+  }
+
+  .timetable-title {
+    font-size: 18px;
+  }
+
+  .event-card {
+    font-size: 8px;
+    padding: 2px;
+  }
 }
