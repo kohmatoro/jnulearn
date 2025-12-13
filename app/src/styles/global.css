@@ -824,12 +824,7 @@ body {
 .grid-cell {
   border-right: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  cursor: pointer;
   position: relative;
-}
-
-.grid-cell:hover {
-  background: #f9f9f9;
 }
 
 .event-card {
@@ -845,6 +840,8 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 2px;
   transition: opacity 0.2s;
+  position: relative;
+  z-index: 10;
 }
 
 .event-card:hover {
@@ -854,6 +851,13 @@ body {
 .event-name {
   font-size: 12px;
   font-weight: 700;
+}
+
+.event-credit {
+  font-size: 10px;
+  font-weight: 600;
+  color: #555;
+  margin-top: 2px;
 }
 
 .event-place {

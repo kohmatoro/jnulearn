@@ -16,7 +16,8 @@ export default function LectureCard({
   similarLectures,
 }) {
   const navigate = useNavigate();
-  const { timetables, addTimetable, addCoursesToTimetable } = useContext(TimetableContext);
+  const context = useContext(TimetableContext);
+  const { timetables = [], addTimetable, addCoursesToTimetable } = context || {};
   
   const [showTimetableModal, setShowTimetableModal] = useState(false);
   const [showChatbotModal, setShowChatbotModal] = useState(false);
@@ -101,7 +102,7 @@ export default function LectureCard({
                   };
                   const newTimetableId = addTimetable("시간표 " + (timetables.length + 1));
                   addCoursesToTimetable(newTimetableId, [lectureData]);
-                  navigate("/timetable", { state: { timetableId: newTimetableId, courses: [lectureData] } });
+                  navigate("/timetable", { state: { timetableId: newTimetableId } });
                   setShowTimetableModal(false);
                 }}
               >

@@ -1,6 +1,14 @@
 import React, { createContext, useState, useCallback } from "react";
 
-export const TimetableContext = createContext();
+export const TimetableContext = createContext({
+  timetables: [],
+  setTimetables: () => {},
+  addTimetable: () => {},
+  deleteTimetable: () => {},
+  addCoursesToTimetable: () => {},
+  removeCourseFromTimetable: () => {},
+  getTimetable: () => null,
+});
 
 export function TimetableProvider({ children }) {
   const [timetables, setTimetables] = useState([
@@ -34,6 +42,23 @@ export function TimetableProvider({ children }) {
     );
   }, []);
 
+  const removeCourseFromTimetable = useCallback((timetableId, courseName) => {
+    setTimetables(prev =>
+      prev.map(t => {
+        if (t.id === timetableId) {
+          return {
+            ...t,
+            courses: t.courses.filter(c => {
+              const name = c["과목명"] || c[" 과목명"];
+              return name !== courseName;
+            }),
+          };
+        }
+        return t;
+      })
+    );
+  }, []);
+
   const getTimetable = useCallback((id) => {
     return timetables.find(t => t.id === id);
   }, [timetables]);
@@ -44,6 +69,7 @@ export function TimetableProvider({ children }) {
     addTimetable,
     deleteTimetable,
     addCoursesToTimetable,
+    removeCourseFromTimetable,
     getTimetable,
   };
 

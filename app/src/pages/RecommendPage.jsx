@@ -5,7 +5,8 @@ import { TimetableContext } from "../context/TimetableContext";
 
 export default function RecommendPage() {
   const navigate = useNavigate();
-  const { timetables, addTimetable, addCoursesToTimetable } = useContext(TimetableContext);
+  const context = useContext(TimetableContext);
+  const { timetables = [], addTimetable, addCoursesToTimetable } = context || {};
   
   const [searchQuery, setSearchQuery] = useState("");
   const [targetCredits, setTargetCredits] = useState("");
@@ -227,8 +228,10 @@ export default function RecommendPage() {
       .filter((lec) => {
         const category = normalize(getValue(lec, ["이수구분", " 이수구분"]));
         const credit = toNumber(getValue(lec, ["학점", " 학점"]));
+        const time = getValue(lec, ["강의실 및 시간", " 강의실 및 시간", "강의실및시간"]);
         // Include 교양 + 일부 선택/일반선택, and credits 1-4
-        return (category.includes("교양") || category.includes("선택")) && credit >= 1 && credit <= 4;
+        // AND must have time information
+        return (category.includes("교양") || category.includes("선택")) && credit >= 1 && credit <= 4 && time && time.trim().length > 0;
       })
       .sort((a, b) => {
         // Prefer SU and lower enrolled/cap ratio first for easier combos

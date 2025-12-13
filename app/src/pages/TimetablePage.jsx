@@ -8,35 +8,58 @@ const COLORS = ["#FFD6D6", "#FFF4BD", "#D4F0F0", "#D6E4FF", "#E8D9FF", "#FFD9FA"
 
 export default function TimetablePage() {
   const location = useLocation();
-  const { timetables, setTimetables } = useContext(TimetableContext);
+  const context = useContext(TimetableContext);
+  const { timetables = [], setTimetables, removeCourseFromTimetable } = context || {};
 
   const [semester, setSemester] = useState("2025년 1학기");
-  const [currentTimetableId, setCurrentTimetableId] = useState(timetables[0]?.id || 1);
-  const [events, setEvents] = useState([
-    { id: 1, name: "자료구조", day: "월", period: 1, duration: 2, place: "공학3관", color: COLORS[0] },
-    { id: 2, name: "인공지능", day: "수", period: 5, duration: 3, place: "IT관", color: COLORS[3] },
-  ]);
+  const [currentTimetableId, setCurrentTimetableId] = useState(() => {
+    // location.state에서 timetableId가 있으면 사용, 없으면 기본값
+    return location.state?.timetableId || timetables[0]?.id || 1;
+  });
+  const [events, setEvents] = useState([]);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [settingsAction, setSettingsAction] = useState(null); // 'setDefault' | 'delete'
   const [selectedDeleteTimetableId, setSelectedDeleteTimetableId] = useState(null);
+  const [showCourseDeleteModal, setShowCourseDeleteModal] = useState(false);
+  const [selectedCourseToDelete, setSelectedCourseToDelete] = useState(null);
 
-
-  // RecommendPage에서 넘어온 데이터 처리
+  // location.state.courses가 있으면 그것을 한 번만 Context에 저장 (초기 로드 시)
   useEffect(() => {
-    if (location.state && location.state.courses) {
-      const newEvents = [];
-      const incomingCourses = location.state.courses;
+    if (location.state?.courses && location.state.courses.length > 0) {
+      // 새 시간표가 방금 만들어진 경우, courses를 Context에 저장
+      const currentTimetable = timetables.find(t => t.id === currentTimetableId);
+      if (currentTimetable && currentTimetable.courses.length === 0) {
+        // 아직 courses가 없으면 location.state에서 추가
+        setTimetables(prev =>
+          prev.map(t => {
+            if (t.id === currentTimetableId) {
+              return { ...t, courses: location.state.courses };
+            }
+            return t;
+          })
+        );
+      }
+    }
+  }, []); // 마운트 시에만 한 번 실행
 
-      incomingCourses.forEach((course, idx) => {
+  // Context의 현재 시간표 courses를 events로 변환
+  useEffect(() => {
+    const currentTimetable = timetables.find(t => t.id === currentTimetableId);
+    
+    if (currentTimetable && currentTimetable.courses && currentTimetable.courses.length > 0) {
+      const convertedEvents = [];
+      currentTimetable.courses.forEach((course, idx) => {
         const title = course["과목명"] || course[" 과목명"] || "";
+        const credit = course["학점"] || course[" 학점"] || 0;
         const placeTime = course["강의실 및 시간"] || course[" 강의실 및 시간"] || course["강의실및시간"] || "";
         const color = COLORS[idx % COLORS.length];
 
         const parsed = parseTimeLocation(placeTime);
-        parsed.forEach((p) => {
-          newEvents.push({
-            id: Date.now() + Math.random(),
+        parsed.forEach((p, pIdx) => {
+          convertedEvents.push({
+            id: `timetable-${currentTimetableId}-${idx}-${pIdx}`,
             name: title,
+            credit: credit,
             day: p.day,
             period: p.period,
             duration: p.duration,
@@ -45,12 +68,11 @@ export default function TimetablePage() {
           });
         });
       });
-
-      if (newEvents.length > 0) {
-        setEvents(prevEvents => [...prevEvents, ...newEvents]);
-      }
+      setEvents(convertedEvents);
+    } else {
+      setEvents([]);
     }
-  }, [location.state]);
+  }, [currentTimetableId, timetables]);
 
   const parseTimeLocation = (rawStr) => {
     if (!rawStr) return [];
@@ -86,17 +108,30 @@ export default function TimetablePage() {
     const name = customName || window.prompt("새 시간표 이름을 입력하세요:");
     if (name) {
       const newId = Math.max(...timetables.map(t => t.id), 0) + 1;
-      setTimetables([...timetables, { id: newId, name, credits: 0 }]);
+      setTimetables([...timetables, { id: newId, name, credits: 0, courses: [] }]);
       setCurrentTimetableId(newId);
       setEvents([]);
     }
   };
 
-  const removeCourse = (id) => {
-    if (window.confirm("이 강의를 삭제하시겠습니까?")) {
-      setEvents(events.filter(evt => evt.id !== id));
-    }
+  const removeCourse = (courseName) => {
+    removeCourseFromTimetable(currentTimetableId, courseName);
+    setShowCourseDeleteModal(false);
+    setSelectedCourseToDelete(null);
   };
+
+  // 현재 시간표의 총 학점 계산
+  const calculateTotalCredits = () => {
+    const currentTimetable = timetables.find(t => t.id === currentTimetableId);
+    if (!currentTimetable || !currentTimetable.courses) return 0;
+    
+    return currentTimetable.courses.reduce((total, course) => {
+      const credit = Number(course["학점"] || course[" 학점"] || 0);
+      return total + credit;
+    }, 0);
+  };
+
+  const totalCredits = calculateTotalCredits();
 
   const deleteTimetable = (id) => {
     if (timetables.length === 1) {
@@ -111,7 +146,7 @@ export default function TimetablePage() {
         setEvents([]);
       }
     }
-  };;
+  };
 
   const currentTimetable = timetables.find(t => t.id === currentTimetableId);
 
@@ -139,7 +174,7 @@ export default function TimetablePage() {
               </button>
             </div>
             <div className="card-content">
-              <div className="credits-display">{currentTimetable?.credits || 0}학점</div>
+              <div className="credits-display">{totalCredits}학점</div>
             </div>
             <div className="card-footer">
               {timetables.map(t => (
@@ -200,7 +235,10 @@ export default function TimetablePage() {
               <div
                 key={evt.id}
                 className="event-card"
-                onClick={() => removeCourse(evt.id)}
+                onClick={() => {
+                  setSelectedCourseToDelete(evt);
+                  setShowCourseDeleteModal(true);
+                }}
                 style={{
                   gridColumn: dayIndex + 2,
                   gridRow: `${evt.period + 1} / span ${evt.duration}`,
@@ -208,6 +246,7 @@ export default function TimetablePage() {
                 }}
               >
                 <div className="event-name">{evt.name}</div>
+                <div className="event-credit">{evt.credit}학점</div>
                 <div className="event-place">{evt.place}</div>
               </div>
             );
@@ -489,6 +528,58 @@ export default function TimetablePage() {
                 onClick={() => {
                   setSettingsAction(null);
                   setShowSettingsModal(false);
+                }}
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 과목 삭제 확인 모달 */}
+      {showCourseDeleteModal && selectedCourseToDelete && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.4)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1002,
+        }}>
+          <div style={{
+            background: "#fff",
+            borderRadius: 12,
+            padding: 20,
+            width: 340,
+            maxWidth: "90%",
+          }}>
+            <h3 style={{ marginTop: 0, marginBottom: 16 }}>과목 삭제</h3>
+            <p style={{ fontSize: "14px", color: "#333", marginBottom: 8 }}>
+              <strong>{selectedCourseToDelete.name}</strong>
+            </p>
+            <p style={{ fontSize: "13px", color: "#666", marginBottom: 16 }}>
+              {selectedCourseToDelete.place && `${selectedCourseToDelete.place} · `}
+              {selectedCourseToDelete.day}요일 {selectedCourseToDelete.period}교시
+            </p>
+            <p style={{ fontSize: "13px", color: "#999", marginBottom: 16 }}>
+              이 과목을 시간표에서 삭제하시겠습니까?
+            </p>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button 
+                className="icon-btn" 
+                style={{ flex: 1, background: "#d32f2f", color: "white" }}
+                onClick={() => removeCourse(selectedCourseToDelete.name)}
+              >
+                삭제
+              </button>
+              <button 
+                className="icon-btn" 
+                style={{ flex: 1 }}
+                onClick={() => {
+                  setShowCourseDeleteModal(false);
+                  setSelectedCourseToDelete(null);
                 }}
               >
                 취소
