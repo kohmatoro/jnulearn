@@ -144,9 +144,9 @@ export default function LecturePage() {
     const noteB = normalize(val(b, ["비고", " 비고"]));
 
     switch (sortOption) {
-      case "경쟁률 높은순":
-        return ratioB - ratioA;
       case "경쟁률 낮은순":
+        return ratioB - ratioA;
+      case "경쟁률 높은순":
         return ratioA - ratioB;
       case "담은인원 많은 순":
         return enrolledB - enrolledA;
@@ -167,6 +167,9 @@ export default function LecturePage() {
         {/* 필터 박스 */}
         <div className="filter-box">
           <div className="filter-line">
+            <span className="filter-icon">
+              <img src="/icons/filter.svg" alt="필터" className="icon-inline" />
+            </span>
             <span className="filter-title">학년:</span>
             {gradeOptions.map((grade) => (
               <label key={grade}>
@@ -178,7 +181,7 @@ export default function LecturePage() {
               </label>
             ))}
 
-            <span className="filter-title" style={{ marginLeft: "40px" }}>이수구분:</span>
+            <span className="filter-title" style={{ marginLeft: "20px" }}>이수구분:</span>
             {categoryOptions.map((cat) => (
               <label key={cat}>
                 {cat} <input
@@ -189,21 +192,24 @@ export default function LecturePage() {
               </label>
             ))}
 
-            <span className="filter-title" style={{ marginLeft: "40px" }}>정렬:</span>
-            <select
-              className="sort-select"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-            >
-                <option value="경쟁률 낮은순">경쟁률 낮은순 ▼</option>
+            <div className="filter-line-right">
+              <span className="filter-title">정렬:</span>
+              <select
+                className="sort-select"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="인기순">인기순 ▼</option>
                 <option value="경쟁률 높은순">경쟁률 높은순 ▲</option>
+                <option value="경쟁률 낮은순">경쟁률 낮은순 ▼</option>
                 <option value="담은인원 많은 순">담은인원 많은 순 ▲</option>
                 <option value="담은인원 적은 순">담은인원 적은 순 ▼</option>
-            </select>
+              </select>
+            </div>
           </div>
 
           <div className="filter-line">
-            <span className="filter-title">요일:</span>
+            <span className="filter-title" style={{ marginLeft: "47px" }}>요일:</span>
             {dayOptions.map((d) => (
               <label key={d}>
                 {d} <input
@@ -214,16 +220,18 @@ export default function LecturePage() {
               </label>
             ))}
 
-            <span className="filter-title" style={{ marginLeft: "40px" }}>학점:</span>
-            {creditOptions.map((c) => (
-              <label key={c}>
-                {c} <input
-                  type="checkbox"
-                  checked={selectedCredits.includes(c)}
-                  onChange={() => toggleSelection(c, selectedCredits, setSelectedCredits)}
-                />
-              </label>
-            ))}
+            <div className="filter-line-right">
+              <span className="filter-title">학점:</span>
+              {creditOptions.map((c) => (
+                <label key={c}>
+                  {c} <input
+                    type="checkbox"
+                    checked={selectedCredits.includes(c)}
+                    onChange={() => toggleSelection(c, selectedCredits, setSelectedCredits)}
+                  />
+                </label>
+              ))}
+            </div>
           </div>
         </div>
 
