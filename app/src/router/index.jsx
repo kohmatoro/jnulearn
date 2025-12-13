@@ -4,9 +4,7 @@ import MainLayout from "../layouts/MainLayout";
 import LecturePage from "../pages/LecturePage";
 import RecommendPage from "../pages/RecommendPage";
 import ChatbotPage from "../pages/ChatbotPage";
-
-// 나중에 만들 페이지들은 일단 임시 컴포넌트
-const TimetablePage = () => <div style={{ color: "white" }}>시간표 페이지 준비중</div>;
+import TimetablePage from "../pages/TimetablePage";
 
 export const router = createBrowserRouter([
   {
