@@ -1,0 +1,671 @@
+:root {
+  --bg-dark: #383838;
+  --bg-light: #F6F6F6;
+  --button-gray: #868686;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-dark);
+  font-family: Pretendard, sans-serif;
+  scrollbar-gutter: stable;
+}
+
+.icon-img {
+  width: 18px;
+  height: 18px;
+  display: block;
+  object-fit: contain;
+}
+
+.icon-inline {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  object-fit: contain;
+  margin-left: 6px;
+}
+
+/* Header (공통) */
+.page-title {
+  color: black;
+  font-size: 36px;
+  padding: 20px 40px;
+  background: var(--bg-light);
+  margin: 0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Content Area */
+.page-container {
+  padding: 20px 40px;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+  height: 52px;
+}
+
+.search-bar input {
+  width: 400px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.search-bar button {
+  padding: 0;
+  background: var(--button-gray);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  height: 100%;
+  width: 52px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar .icon-img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Lecture Card */
+.lecture-card {
+  background: var(--bg-light);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.lecture-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.lecture-info {
+  margin-top: 6px;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+.lecture-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  color: #666;
+}
+
+.card-icons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  gap: 8px;
+}
+
+.icon-btn {
+  padding: 8px 12px;
+  background: var(--button-gray);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+/* LecturePage Layout */
+.lecture-layout {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+}
+
+/* 좌측 필터 바 */
+.filter-bar {
+  width: 250px;
+  background: #F6F6F6;
+  padding: 20px;
+  border-radius: 10px;
+  height: fit-content;
+}
+
+.filter-bar h3 {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* 우측 강의 목록 */
+.lecture-content {
+  flex: 1;
+}
+
+.search-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+/* 전체 레이아웃 */
+.lecture-wrapper {
+  padding: 30px 300px;
+}
+
+/* 🔥 필터 박스 + 검색창을 감싸는 줄 */
+.filter-search-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+/* 필터 박스 크기 재조정 (검색창과 겹치지 않도록) */
+.filter-box {
+  background: var(--bg-light);
+  padding: 12px 24px;
+  border-radius: 12px;
+  flex: 0 1 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: fit-content;
+}
+
+/* 검색창 영역 */
+.search-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1 1 280px;
+  height: 52px;
+}
+
+/* 한 줄 필터 */
+.filter-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  line-height: 1;
+  justify-content: flex-start;
+}
+
+.filter-line-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.filter-title {
+  font-weight: 600;
+  font-size: clamp(11px, 1.2vw, 12px);
+  margin: 0;
+}
+
+.filter-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+/* 정렬 셀렉트 */
+.sort-select {
+  padding: 2px 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: clamp(10px, 1.1vw, 11px);
+  height: 24px;
+}
+
+.filter-box label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(10px, 1.2vw, 12px);
+  margin: 0;
+  white-space: nowrap;
+  padding: 0;
+  line-height: 1;
+}
+
+.filter-box label input {
+  cursor: pointer;
+  margin: 0;
+  width: clamp(12px, 1.2vw, 14px);
+  height: clamp(12px, 1.2vw, 14px);
+  padding: 0;
+}
+
+/* Tab Menu */
+.tab-menu {
+  display: flex;
+  gap: 40px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  position: relative;
+  bottom: -1px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 400;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -21px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #000;
+}
+
+.tab-btn.active::after {
+  background-color: #000;
+}
+
+/* Recommend Page Grid Layout */
+.recommend-wrapper {
+  padding: 30px 300px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ===================== Responsive Breakpoints ===================== */
+@media (max-width: 1200px) {
+  .lecture-wrapper {
+    padding: 30px 160px;
+  }
+  .recommend-wrapper {
+    padding: 30px 160px;
+  }
+  .tab-menu {
+    gap: 28px;
+  }
+  .filter-box {
+    flex: 1 1 480px;
+    max-width: 700px;
+  }
+  .search-bar input {
+    width: 340px;
+  }
+}
+
+@media (max-width: 992px) {
+  .lecture-wrapper {
+    padding: 24px 80px;
+  }
+  .recommend-wrapper {
+    padding: 24px 80px;
+    grid-template-columns: 1fr; /* stack cards */
+  }
+  .tab-menu {
+    gap: 24px;
+  }
+  .filter-search-row {
+    gap: 16px;
+  }
+  .filter-box {
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 8px 18px;
+  }
+  .search-box {
+    flex: 1 1 100%;
+    height: 48px;
+  }
+  .search-bar input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 28px;
+    padding: 16px 20px;
+  }
+  .lecture-wrapper {
+    padding: 16px 20px;
+  }
+  .recommend-wrapper {
+    padding: 16px 20px;
+  }
+  .tab-menu {
+    gap: 18px;
+  }
+  .filter-box label {
+    gap: 4px;
+  }
+  .filter-line {
+    gap: 6px;
+  }
+  .search-bar {
+    height: 46px;
+  }
+  .search-bar button {
+    width: 46px;
+  }
+  .search-bar .icon-img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.recommend-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recommend-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recommend-card {
+  background: var(--bg-light);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.recommend-card h2 {
+  font-size: 20px;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.recommend-card h3 {
+  font-size: 14px;
+  margin: 12px 0 6px 0;
+  font-weight: 600;
+}
+
+.recommend-card p {
+  font-size: 13px;
+  margin: 8px 0;
+  color: #333;
+}
+
+/* Chatbot Page */
+.chatbot-wrapper {
+  padding: 30px 120px;
+  min-height: 100vh;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.chatbot-container {
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 75vh;
+}
+
+.chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f5f5f5;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f5f5f5;
+}
+
+.chatbot-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.chatbot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 16px;
+  text-align: center;
+  gap: 8px;
+}
+
+.chatbot-empty p {
+  margin: 0;
+}
+
+.chatbot-message {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.chatbot-message.user {
+  justify-content: flex-end;
+}
+
+.chatbot-message.assistant {
+  justify-content: flex-start;
+}
+
+.chatbot-message-content {
+  max-width: 70%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  font-size: 14px;
+  font-family: Pretendard, sans-serif;
+}
+
+.chatbot-message.user .chatbot-message-content {
+  background: #3a3a3a;
+  color: white;
+  border-radius: 16px 16px 4px 16px;
+}
+
+.chatbot-message.assistant .chatbot-message-content {
+  background: #888888;
+  color: white;
+  border-radius: 16px 16px 16px 4px;
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+
+.chatbot-form {
+  display: flex;
+  gap: 10px;
+  background: #f5f5f5;
+  padding: 16px 30px 30px 30px;
+  border-top: none;
+}
+
+.chatbot-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: Pretendard, sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #3a3a3a;
+  color: white;
+}
+
+.chatbot-input::placeholder {
+  color: #999;
+}
+
+.chatbot-input:focus {
+  border: 1px solid #555;
+}
+
+.chatbot-input:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.chatbot-button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: #888888;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Pretendard, sans-serif;
+  flex-shrink: 0;
+}
+
+.chatbot-button:hover:not(:disabled) {
+  background: #707070;
+}
+
+.chatbot-button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.timetable-grid {
+  display: grid;
+  /* 시간축(80px) + 5일(자동) */
+  grid-template-columns: 80px repeat(5, 1fr);
+  /* 헤더(50px) + 10교시(자동) */
+  grid-template-rows: 50px repeat(10, 1fr);
+  
+  background: #fff;
+  border-radius: 12px;
+  min-height: 600px; /* 시간표 높이 확보 */
+  overflow: hidden;
+}
+
+/* 칸 구분선 및 정렬 */
+.grid-header, .grid-time, .grid-cell {
+  border: 1px solid #eee; /* 얇은 테두리 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-header, .grid-time {
+  background: var(--bg-light); 
+  font-weight: bold;
+  color: #555;
+}
+
+.grid-cell {
+  cursor: pointer; 
+}
+
+.grid-cell:hover {
+  background: #f0f0f0;
+}
+
+
+.event-card {
+  margin: 2px;
+  padding: 4px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
